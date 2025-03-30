@@ -79,10 +79,6 @@ def upload_files(request):
           file_url=file_url)
       return redirect('home')
     return render(request,'home.html')
-
-
-   
-
 @login_required(login_url='login')
 def homepage(request):
     user_files = uplodfiles.objects.filter(user=request.user)
