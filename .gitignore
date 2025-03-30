@@ -1,0 +1,10 @@
+
+
+# Ignore Django settings and sensitive files
+.env
+
+
+# Ignore static & media files
+staticfiles/
+
+
