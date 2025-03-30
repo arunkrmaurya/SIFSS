@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home Page</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+</head>
+<body>
+
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container">
+            <a class="navbar-brand" href="#">Secure File Sharing</a>
+            <form method="post" action="{% url 'logout' %}">
+                {% csrf_token %}
+                <button class="btn btn-danger">Logout</button>
+            </form>
+        </div>
+    </nav>
+
+    <!-- Main Container -->
+    <div class="container mt-5">
+        <h2 class="text-center mb-4">Welcome to Secure File Storage</h2>
+
+        <!-- Upload Section -->
+        <div class="card shadow-lg p-4 mb-5">
+            <h4>Upload New File</h4>
+            <form action="{% url 'upload_file' %}" method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+                <div class="mb-3">
+                    <label class="form-label">Select File</label>
+                    <input type="file" class="form-control" name="file" required>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">File Name</label>
+                    <input type="text" class="form-control" name="fname" required>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Choose File Type</label>
+                    <select class="form-select" name="types">
+                        <option value=".pdf">PDF (.pdf)</option>
+                        <option value=".txt">Text (.txt)</option>
+                        <option value=".csv">CSV (.csv)</option>
+                        <option value=".jpeg">JPEG (.jpeg)</option>
+                        <option value=".png">PNG (.png)</option>
+                        <option value="other">Other</option>
+                    </select>
+                </div>
+                <button type="submit" class="btn btn-primary">Upload File</button>
+            </form>
+        </div>
+
+        <!-- Uploaded Files List -->
+        <div class="card shadow-lg p-4">
+            <h4>Your Uploaded Files</h4>
+            <table class="table table-bordered table-hover mt-3">
+                <thead class="table-dark">
+                    <tr>
+                        <th>File Name</th>
+                        <th>File Size (bytes)</th>
+                        <th>Download</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for file in user_files %}
+                    <tr>
+                        <td>{{ file.file_name }}</td>
+                        <td>{{ file.file_size }}</td>
+                        <td>
+                            <a href="{{ file.presigned_url }}" class="btn btn-success" target="_blank">Download</a>
+                        </td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="3" class="text-center">No files uploaded yet.</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Button to View All Files -->
+        <div class="text-center mt-4">
+            <a href="{% url 'file_list' %}" class="btn btn-secondary">View All Uploaded Files</a>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
